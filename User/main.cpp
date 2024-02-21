@@ -50,7 +50,7 @@ void GPIO_Toggle_INIT(void)
  */
 int main(void)
 {
-    u8 i = 0;
+    bool led_status = Bit_RESET;
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     SystemCoreClockUpdate();
@@ -65,6 +65,7 @@ int main(void)
     while(1)
     {
         Delay_Ms(250);
-        GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+        GPIO_WriteBit(GPIOA, GPIO_Pin_0, static_cast<BitAction>(led_status));
+        led_status = !led_status;
     }
 }
