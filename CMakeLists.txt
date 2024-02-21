@@ -2,8 +2,10 @@ SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_VERSION 1)
 cmake_minimum_required(VERSION 3.12)
 
+SET(CPU_FLAGS "-march=rv32imacxw -mabi=ilp32")
 SET(COMMON_FLAGS
-    "-march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections \
+    "${CPU_FLAGS} -msmall-data-limit=8 -msave-restore \
+    -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections \
     -fno-common -nostartfiles --specs=nano.specs --specs=nosys.specs \
     -Wall -Wextra -Wno-missing-field-initializers -Wno-comment\
     -Werror=return-type -Werror=return-local-addr -Werror=uninitialized"
@@ -31,11 +33,13 @@ file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS
     User/*.*
 )
 
+message("src files:")
 foreach(file ${SRCS})
     message(STATUS ${file})
 endforeach()
 
 add_executable(${PROJECT_NAME}.elf ${SRCS})
+target_link_libraries(${PROJECT_NAME}.elf PRIVATE m)
 target_include_directories(${PROJECT_NAME}.elf PUBLIC
     Startup
     Debug
