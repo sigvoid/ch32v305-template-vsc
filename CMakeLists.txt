@@ -4,14 +4,15 @@ cmake_minimum_required(VERSION 3.12)
 
 SET(COMMON_FLAGS
     "-march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections \
-    -Wall -Wextra -fno-common -nostartfiles --specs=nano.specs --specs=nosys.specs \
-    -Wno-missing-field-initializers -Werror=return-type -Werror=return-local-addr -Werror=uninitialized"
+    -fno-common -nostartfiles --specs=nano.specs --specs=nosys.specs \
+    -Wall -Wextra -Wno-missing-field-initializers -Wno-comment\
+    -Werror=return-type -Werror=return-local-addr -Werror=uninitialized"
 )
 
 SET(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/Ld/Link.ld")
 SET(CMAKE_ASM_FLAGS_INIT "${COMMON_FLAGS} -x assembler-with-cpp")
 SET(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS}")
-SET(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -fno-rtti -fno-exceptions -fno-unwind-tables")
+SET(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -fno-rtti -fno-exceptions -fno-unwind-tables -Wno-volatile")
 SET(CMAKE_EXE_LINKER_FLAGS_INIT "-Wl,-gc-sections,--print-memory-usage -T ${LINKER_SCRIPT}")
 
 # Project
